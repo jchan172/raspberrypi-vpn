@@ -2,14 +2,14 @@
 
 ## Server Side Setup
 
-1. [Set up NOOBS and install Raspbian](https://www.raspberrypi.org/help/noobs-setup/). To make life easier, make sure to enable SSH by running `raspi-config` and then navigating to Advanced Options, SSH, then select "Enable". Y
+1. [Set up NOOBS and install Raspbian](https://www.raspberrypi.org/help/noobs-setup/). To make life easier, make sure to enable SSH by running `raspi-config` and then navigating to Advanced Options, SSH, then select "Enable".
 
-2. Update Raspberry Pi
+2. Update Raspberry Pi.
 
 		sudo apt-get update
 		sudo apt-get upgrade
 
-3. Install software
+3. Install software.
 
 		sudo apt-get install openvpn vim
 
@@ -17,7 +17,7 @@
 
 		sudo su
 
-5. Copy OpenVPN's easy-rsa directory as template files (easy-rsa is for authorization to connect to VPN server)
+5. Copy OpenVPN's easy-rsa directory as template files (easy-rsa is for authorization to connect to VPN server).
 		cp –r /usr/share/doc/openvpn/examples/easy-rsa/2.0 /etc/openvpn/easy-rsa 
 
 6. Open `vars` file for editing. These are easy-rsa parameter settings.
@@ -168,7 +168,7 @@
 
 ## Client Side Setup
 
-With the previous steps finished, you've got a functional VPN server ready on your Raspberry Pi. Keys have been created too, but clients still have no way to connect to the server. They will need a configuration file with their keys in order to connect. Also, at this point, you'll need to use a dynamic DNS service so that you can access your Raspberry Pi from outside the local network.
+With the previous steps finished, you've got a functional VPN server ready on your Raspberry Pi. Keys have been created too, but clients still have no way to connect to the server. They will each need a configuration file with their key in order to connect. Also, at this point, you'll need to use a dynamic DNS service so that you can access your Raspberry Pi from outside the local network.
 
 1. Your public IP address can change, unless your ISP gives a static IP address. So, you'll need a dynamic DNS provider to provide a stable name that maps to your changing IP address (there will be code/cron job on the server that updates the dynamic DNS provider when the IP changes). A good, free dynamic DNS provider is Duck DNS at [www.duckdns.com](www.duckdns.com). Sign up on the website (asks you to use Facebook, Google, Twitter, or Reddit). You can then choose a subdomain (http://<SUBDOMAIN>.duckdns.com). Finally, click on the install tab, click on "pi" for the operating system option, and follow the instructions. The instructions creates a cron job that updates Duck DNS so that it knows what your public IP address is. It periodically checks the IP address and updates Duck DNS.
 
@@ -223,3 +223,7 @@ With the previous steps finished, you've got a functional VPN server ready on yo
 		chmod 600 -R /etc/openvpn
 
 5. Now you can use client software to connect to the VPN server! For your PC, Android, or iOS mobile device, download [OpenVPN Connect](https://openvpn.net/). On OSX, TunnelBlick is a good, free option. To use TunnelBlick, install it, and then double-click a `.ovpn` file (should default to open TunnelBlick). If everything's been done correctly, you'll be asked to enter a keyphrase (enter in the one that you used to create the client key), and you'll be connected!
+
+### References
+[Building A Raspberry Pi VPN Part One: How And Why To Build A Server](http://readwrite.com/2014/04/10/raspberry-pi-vpn-tutorial-server-secure-web-browsing)
+[Building A Raspberry Pi VPN Part Two: Creating An Encrypted Client Side](http://readwrite.com/2014/04/11/building-a-raspberry-pi-vpn-part-two-creating-an-encrypted-client-side)
