@@ -69,7 +69,7 @@
 
 10. Build the key server.
 
-		./build-key-server [your_server_name] # example: ./build-key-server chanvpn
+		./build-key-server [YOUR_SERVER_NAME] # example: ./build-key-server chanvpn
 
 	Once again, there will be prompts to enter optional fields, but pay attention to 3 fields:
 	
@@ -103,7 +103,7 @@
 		cd /etc/openvpn/easy-rsa/keys
 		openssl rsa -in jack.key -des3 -out jack.3des.key  
 
-		# when it asks "Enter pass phrase for jack.key", just enter the one used before
+	When it asks "Enter pass phrase for jack.key", just enter the one used before
 
 13. Generate Diffie-Hellman key exchange. This is the central code that makes your VPN server tick, an exchange that lets two entities with no prior knowledge of one another share secret keys over a public server. Like RSA, it’s one of the earliest cryptosystems out there.
 
@@ -203,7 +203,7 @@ With the previous steps finished, you've got a functional VPN server ready on yo
 		chmod 700 makeOVPN.sh
 		./makeOVPN.sh
 
-	You should see something like:
+	You'll then be asked to enter an existing client name. Enter the client name you put in previously. After you've done that, you should see something like:
 
 		root@raspberrypivpn:/etc/openvpn/easy-rsa/keys# ./makeOVPN.sh
 		Please enter an existing Client Name:
@@ -224,6 +224,48 @@ With the previous steps finished, you've got a functional VPN server ready on yo
 
 5. Now you can use client software to connect to the VPN server! For your PC, Android, or iOS mobile device, download [OpenVPN Connect](https://openvpn.net/). On OSX, TunnelBlick is a good, free option. To use TunnelBlick, install it, and then double-click a `.ovpn` file (should default to open TunnelBlick). If everything's been done correctly, you'll be asked to enter a keyphrase (enter in the one that you used to create the client key), and you'll be connected!
 
-### References
+## Post Setup Quick Reference
+
+### Create More Users
+
+1. Create key.
+
+		sudo su
+		cd /etc/openvpn/easy-rsa/
+		source ./vars
+		./build-key-pass [CLIENT_NAME] # example: ./build-key-pass iphone
+
+	There will be prompts to enter optional fields, but pay attention to 3 fields:
+	
+	- Enter PEM pass phrase Make it a password you will remember! It asks you to input this twice, so there’s no danger of ruining it. 
+	- A challenge password? MUST be left blank.
+	- `Sign the certificate? [y/n]` Enter "y". Signing certifies it for 10 more years.
+
+2. Add des3 encrpytion to key.
+
+		cd /etc/openvpn/easy-rsa/keys
+		openssl rsa -in [CLIENT_NAME].key -des3 -out [CLIENT_NAME].3des.key # example: openssl rsa -in iphone.key -des3 -out iphone.3des.key
+
+	When it asks "Enter pass phrase for [CLIENT_NAME].key", just enter the one used before.
+
+3. Create configuration (the `.ovpn` file that client needs)
+
+		cd /etc/openvpn/easy-rsa/keys
+		./makeOVPN.sh
+
+	You'll then be asked to enter an existing client name. Enter the CLIENT_NAME you put in the previous two steps. After you've done that, you should see something like:
+
+		root@raspberrypivpn:/etc/openvpn/easy-rsa/keys# ./makeOVPN.sh
+		Please enter an existing Client Name:
+		iphone
+		Client’s cert found: iphone
+		Client’s Private Key found: iphone.3des.key
+		CA public Key found: ca.crt
+		tls-auth Private Key found: ta.key
+		Done! iphone.ovpn Successfully Created.
+
+
+## References
 [Building A Raspberry Pi VPN Part One: How And Why To Build A Server](http://readwrite.com/2014/04/10/raspberry-pi-vpn-tutorial-server-secure-web-browsing)
+
 [Building A Raspberry Pi VPN Part Two: Creating An Encrypted Client Side](http://readwrite.com/2014/04/11/building-a-raspberry-pi-vpn-part-two-creating-an-encrypted-client-side)
