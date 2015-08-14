@@ -172,7 +172,7 @@
 
 With the previous steps finished, you've got a functional VPN server ready on your Raspberry Pi. Keys have been created too, but clients still have no way to connect to the server. They will each need a configuration file with their key in order to connect. Also, at this point, you'll need to use a dynamic DNS service so that you can access your Raspberry Pi from outside the local network.
 
-1. Your public IP address can change, unless your ISP gives a static IP address. So, you'll need a dynamic DNS provider to provide a stable name that maps to your changing IP address (there will be code/cron job on the server that updates the dynamic DNS provider when the IP changes). A good, free dynamic DNS provider is Duck DNS at [www.duckdns.com](www.duckdns.com). Sign up on the website (asks you to use Facebook, Google, Twitter, or Reddit). You can then choose a subdomain (http://[YOUR_SUBDOMAIN].duckdns.com). Finally, click on the install tab, click on "pi" for the operating system option, and follow the instructions. The instructions creates a cron job that updates Duck DNS so that it knows what your public IP address is. It periodically checks the IP address and updates Duck DNS.
+1. Your public IP address can change, unless your ISP gives a static IP address. So, you'll need a dynamic DNS provider to provide a stable name that maps to your changing IP address (there will be code/cron job on the server that updates the dynamic DNS provider when the IP changes). A good, free dynamic DNS provider is Duck DNS at [www.duckdns.org](www.duckdns.org). Sign up on the website (asks you to use Facebook, Google, Twitter, or Reddit). You can then choose a subdomain (http://[YOUR_SUBDOMAIN].duckdns.org). Finally, click on the install tab, click on "pi" for the operating system option, and follow the instructions. The instructions creates a cron job that updates Duck DNS so that it knows what your public IP address is. It periodically checks the IP address and updates Duck DNS.
 
 2. Enter the router config (go to 192.168.1.1 or whatever your router is) and forward a port. You'll need to create the port forwarding rule, specifying your Raspberry Pi as the IP address to forward and then for the application to forward, select "Custom Port". Select "UDP" as the protocol, source ports as "Any", destination ports as "1194", forward to port as "Same as Incoming Port", schedule as "always", and WAN connection type as "All Broadband Devices". This makes it so that any traffic that hits the 1194 port (OpenVPN's official port number) will be sent to the Raspberry Pi (the VPN server).
 
@@ -185,7 +185,7 @@ With the previous steps finished, you've got a functional VPN server ready on yo
 		client
 		dev tun
 		proto udp
-		remote <INSERT YOUR DYNAMIC DNS ADDRESS> 1194
+		remote YOUR_SUBDOMAIN.duckdns.org 1194
 		resolv-retry infinite
 		nobind
 		persist-key
